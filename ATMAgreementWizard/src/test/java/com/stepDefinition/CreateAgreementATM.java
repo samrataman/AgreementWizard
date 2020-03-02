@@ -1,8 +1,13 @@
 package com.stepDefinition;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -30,8 +35,10 @@ public class CreateAgreementATM {
 	AgreementDashboard agreementDashboard;
 	AgreementsATM atmAgreement;
 	int categoriesCount = 4;
+	int locationCount = 4;
 	
-	Xls_Reader reader = new Xls_Reader("E:\\CSGAutomation\\ATMAgreementWizard\\ExcelData\\sample.xlsx");
+	
+	Xls_Reader reader = new Xls_Reader("C:\\Users\\aman.k\\git\\AgreementWizard\\ATMAgreementWizard\\ExcelData\\sample.xlsx");
 	
 	static DriverInstance instance;
 	{
@@ -168,35 +175,35 @@ public class CreateAgreementATM {
 	@When("user selects given equipment categories")
 	public void user_selects_given_equipment_categories() {
 		atmAgreement = new AgreementsATM(driver);
-		String category = reader.getCellData("ATM", "Equipment Category", 2);
-		atmAgreement.select_all_checkImagingService();
+//		String category = reader.getCellData("ATM", "Equipment Category", 2);
+//		atmAgreement.select_all_checkImagingService();
 		
-		
-//		List<String> categories = new ArrayList<String>();
-//	    for(int i=1;i<=categoriesCount;i++) {
-//	    	int count = 2;
-//	    	categories.add(reader.getCellData("ATM", "Equipment Category", count));
-//	    	count++;
-//	    }
-//	    
-//	    for(String category: categories) {
-//	    	System.out.println("Categories are: "+category);
-//	    	if(category.equals("Event to Video")) {
-//	    		atmAgreement.select_eventToVideo();
-//	    	}
-//	    	else if(category.equals("RemoteView Connect")) {
-//	    		atmAgreement.select_remoteViewConnect();
-//	    	}
-//	    	else if(category.equals("NCR Software Maintenance")) {
-//	    		atmAgreement.select_ncrSoftwareMaintenance();
-//	    	}
-//	    	else if(category.equals("Hosted Server Agreement")) {
-//	    		atmAgreement.select_all_hostedServer();
-//	    	}
-//	    	else {
-//	    		System.out.println("No categories selected");
-//	    	}
-//	    }
+		int count = 2;
+		List<String> categories = new ArrayList<String>();
+	    for(int i=1;i<=categoriesCount;i++) {
+	    	categories.add(reader.getCellData("ATM", "Equipment Category", count));
+	    	count++;
+	    }
+	    
+	    
+	    for(String category1: categories) {
+	    	System.out.println("Categories are: "+category1);
+	    	if(category1.contains("Event to Video")) {
+	    		atmAgreement.select_eventToVideo();
+	    	}
+	    	else if(category1.contains("RemoteView Connect")) {
+	    		atmAgreement.select_remoteViewConnect();
+	    	}
+	    	else if(category1.contains("NCR Software Maintenance")) {
+	    		atmAgreement.select_ncrSoftwareMaintenance();
+	    	}
+	    	else if(category1.contains("Hosted Server Agreement")) {
+	    		atmAgreement.select_all_hostedServer();
+	    	}
+	    	else {
+	    		System.out.println("No categories selected");
+	    	}
+	    }
 	}
 	
 	@When("user search and selects a location")
@@ -204,12 +211,38 @@ public class CreateAgreementATM {
 	   
 		loaderInvisibilityWait();
 		atmAgreement = new AgreementsATM(driver);
-		String loc = reader.getCellData("CreateAgreement", "Locations", 2);
-		atmAgreement.search_Location(loc);
-		loaderVisibilityWait();
-		loaderInvisibilityWait();
-		Thread.sleep(2000);
-		atmAgreement.select_location();
+		
+		int count = 2;
+		List<String> locations = new ArrayList<String>();
+	    for(int i=1;i<=locationCount;i++) {
+	    	locations.add(reader.getCellData("CreateAgreement", "Locations", count));
+	    	count++;
+	    }
+	    
+	    for(String location: locations) {
+	    	System.out.println("Selected categories are: " +location);
+	    	atmAgreement.search_Location(location);
+			loaderVisibilityWait();
+			loaderInvisibilityWait();
+			Thread.sleep(2000);
+			atmAgreement.select_location();
+	    }
+		
+	}
+	
+	@When("user expand each location")
+	public void user_expand_each_location() {
+		atmAgreement = new AgreementsATM(driver);
+		int size = atmAgreement.get_equipmentInfo_count();
+		System.out.println("Number of Equipments are: " +size);
+		for(int i=0;i<size;i++) {
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//table[@class=\"table\"]//tbody//tr[i+1]//td[1]"))).click();
+		}
+	}
+
+	@Then("Equipment info will be shown")
+	public void equipment_info_will_be_shown() {
+	 
 	}
 
 

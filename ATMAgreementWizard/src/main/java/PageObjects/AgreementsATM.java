@@ -1,5 +1,7 @@
 package PageObjects;
 
+import java.util.List;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -80,6 +82,14 @@ public class AgreementsATM {
 	@FindBy(xpath="//table[@id=\"tblLocation\"]//tbody//tr//td[1]//input[@type=\"checkbox\"]")
 	WebElement locationCheckBox;
 	
+	@FindBy(xpath="//tr[@class=\"tr-main\"]//td[1]")
+	WebElement equipmentInfo;
+	
+	public int get_equipmentInfo_count() {
+		List<WebElement> ei = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//table[@class=\"table\"]//tbody//tr[@class=\"tr-main\"]")));
+		return (ei.size()); 
+	}
+	
 	public void search_Location(String loc) {
 		locationSearchField.clear();
 		locationSearchField.sendKeys(loc);
@@ -100,6 +110,7 @@ public class AgreementsATM {
 	
 	public void select_all_hostedServer() {
 		hostedServer.click();
+		System.out.println("hostedServer clicked");
 	}
 	
 	public void select_all_sanSolution() {
@@ -116,10 +127,12 @@ public class AgreementsATM {
 	
 	public void select_remoteViewConnect() {
 		remoteViewConnect.click();
+		System.out.println("remoteViewConnect clicked");
 	}
 	
 	public void select_ncrSoftwareMaintenance() {
 		ncrSoftwareMaintenance.click();
+		System.out.println("ncrSoftwareMaintenance clicked");
 	}
 	
 	public void select_hyosungSoftwareMaintenance() {

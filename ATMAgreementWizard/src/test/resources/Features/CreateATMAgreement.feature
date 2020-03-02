@@ -36,12 +36,17 @@ Feature: Successfully create a ticket under Supoport -> Ticket page
   	When user selects given equipment categories
   	And  click on next
   	Then page with header "Location(s)" should open
-  	
+  
   @SelectLocation
   Scenario: User can select one or more location, inorder to create an agreement
   	When user search and selects a location
   	And  click on next
   	Then page with header "Equipment Info" should open
-  	 
+  	
+  @ExpandallEquipmentInfo
+  Scenario: User can expand each location one by one to view Equipment Info.
+   When user expand each location
+   Then Equipment info will be shown
+  
     
 
